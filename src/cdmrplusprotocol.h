@@ -101,9 +101,6 @@ protected:
     char DmrDstIdToModule(uint32) const;
     uint32 ModuleToDmrDestId(char) const;
     
-    // uiStreamId helpers
-    uint32 IpToStreamId(const CIp &) const;
-    
     // Buffer & LC helpers
     void AppendVoiceLCToBuffer(CBuffer *, uint32) const;
     void AppendTerminatorLCToBuffer(CBuffer *, uint32) const;

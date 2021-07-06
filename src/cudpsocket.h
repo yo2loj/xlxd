@@ -71,7 +71,11 @@ public:
 protected:
     // data
     int                 m_Socket;
+#ifdef IPV6_SUPPORT
+    struct sockaddr_storage  m_SocketAddr;
+#else
     struct sockaddr_in  m_SocketAddr;
+#endif
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////

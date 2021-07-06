@@ -119,9 +119,6 @@ protected:
     // server status packet encoding helpers
     bool EncodeServerStatusPacket(CBuffer *) const;
     
-    // uiStreamId helpers
-    uint32 IpToStreamId(const CIp &) const;
-    
     // debug
     bool DebugTestDecodePacket(const CBuffer &);
     bool DebugDumpHeaderPacket(const CBuffer &);

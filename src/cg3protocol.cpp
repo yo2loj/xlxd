@@ -161,7 +161,7 @@ void CG3Protocol::PresenceTask(void)
     {
 
         CIp Ip(ReqIp);
-        Ip.GetSockAddr()->sin_port = htons(G3_DV_PORT);
+        ((struct sockaddr_in *)Ip.GetSockAddr())->sin_port = htons(G3_DV_PORT);
 
         if (Buffer.size() == 32)
         {
@@ -191,7 +191,7 @@ void CG3Protocol::PresenceTask(void)
             while ( (extant = clients->FindNextClient(PROTOCOL_G3, &index)) != NULL )
             {
                 CIp ClIp = extant->GetIp();
-                if (ClIp.GetAddr() == Ip.GetAddr())
+                if (ClIp == Ip)
                 {
                     break;
                 }
@@ -330,6 +330,7 @@ void CG3Protocol::ConfigTask(void)
 
                 if (m_GwAddress == 0)
                 {
+                    std::cout << "Using gateway address " << inet_ntoa(*(in_addr *)m_ConfigSocket.GetLocalAddr()) << std::endl;
                     Buffer.Append(*(uint32 *)m_ConfigSocket.GetLocalAddr()); 
                 }
                 else
@@ -367,7 +368,7 @@ void CG3Protocol::IcmpTask(void)
                 while ( (client = clients->FindNextClient(PROTOCOL_G3, &index)) != NULL )
                 {
                     CIp ClientIp = client->GetIp();
-                    if (ClientIp.GetAddr() == Ip.GetAddr())
+                    if (ClientIp.HasSameAddr(Ip))
                     {
                         clients->RemoveClient(client);
                     }
@@ -403,7 +404,7 @@ void CG3Protocol::Task(void)
         while ( (client = clients->FindNextClient(PROTOCOL_G3, &index)) != NULL )
         {
             ClIp = client->GetIp();
-            if (ClIp.GetAddr() == Ip.GetAddr())
+            if (ClIp == Ip)
             {
                 BaseIp = &ClIp;
                 client->Alive();
@@ -576,7 +577,7 @@ bool CG3Protocol::OnDvHeaderPacketIn(CDvHeaderPacket *Header, const CIp &Ip)
         while ( (client = clients->FindNextClient(PROTOCOL_G3, &index)) != NULL )
         {
             CIp ClIp = client->GetIp();
-            if (ClIp.GetAddr() == Ip.GetAddr())
+            if (ClIp == Ip)
             {
                 break;
             }

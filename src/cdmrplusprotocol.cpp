@@ -470,7 +470,7 @@ bool CDmrplusProtocol::IsValidDvHeaderPacket(const CIp &Ip, const CBuffer &Buffe
             rpt1.SetModule(DMRPLUS_MODULE_ID);
             CCallsign rpt2 = m_ReflectorCallsign;
             rpt2.SetModule(DmrDstIdToModule(uiDstId));
-            uint32 uiStreamId = IpToStreamId(Ip);
+            uint32 uiStreamId = Ip.StreamId();
             
             // and packet
             *Header = new CDvHeaderPacket(uiSrcId, CCallsign("CQCQCQ"), rpt1, rpt2, uiStreamId, 0, 0);
@@ -528,7 +528,7 @@ bool CDmrplusProtocol::IsValidDvFramePacket(const CIp &Ip, const CBuffer &Buffer
             dmrsync[6] = dmrframe[19] & 0xF0;
             
             // and create 3 dv frames
-            uint32 uiStreamId = IpToStreamId(Ip);
+            uint32 uiStreamId = Ip.StreamId();
             // frame1
             memcpy(dmrambe, &dmr3ambe[0], 9);
             frames[0] = new CDvFramePacket(dmrambe, dmrsync, uiStreamId, uiVoiceSeq, 1);
@@ -833,14 +833,4 @@ void CDmrplusProtocol::ReplaceEMBInBuffer(CBuffer *buffer, uint8 uiDmrPacketId) 
         buffer->ReplaceAt(44, (uint8)((buffer->at(44) & 0xF0) | ((emb[1U] >> 4) & 0x0F)));
         buffer->ReplaceAt(45, (uint8)((buffer->at(45) & 0x0F) | ((emb[1U] << 4) & 0xF0)));
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-// uiStreamId helpers
-
-
-// uiStreamId helpers
-uint32 CDmrplusProtocol::IpToStreamId(const CIp &ip) const
-{
-    return ip.GetAddr() ^ (uint32)(MAKEDWORD(ip.GetPort(), ip.GetPort()));
 }

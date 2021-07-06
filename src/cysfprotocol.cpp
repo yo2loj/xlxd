@@ -450,7 +450,7 @@ bool CYsfProtocol::IsValidDvHeaderPacket(const CIp &Ip, const CYSFFICH &Fich, co
     if ( Fich.getFI() == YSF_FI_HEADER )
     {
         // get stream id
-        uint32 uiStreamId = IpToStreamId(Ip);
+        uint32 uiStreamId = Ip.StreamId();
         
         // get header data
         CYSFPayload ysfPayload;
@@ -519,7 +519,7 @@ bool CYsfProtocol::IsValidDvFramePacket(const CIp &Ip, const CYSFFICH &Fich, con
     if ( Fich.getFI() == YSF_FI_COMMUNICATIONS )
     {
         // get stream id
-        uint32 uiStreamId = IpToStreamId(Ip);
+        uint32 uiStreamId = Ip.StreamId();
         
         // get DV frames
         uint8   ambe0[AMBEPLUS_SIZE];
@@ -576,7 +576,7 @@ bool CYsfProtocol::IsValidDvLastFramePacket(const CIp &Ip, const CYSFFICH &Fich,
     if ( Fich.getFI() == YSF_FI_TERMINATOR )
     {
         // get stream id
-        uint32 uiStreamId = IpToStreamId(Ip);
+        uint32 uiStreamId = Ip.StreamId();
         
         // get DV frames
         {
@@ -989,17 +989,6 @@ uint32 CYsfProtocol::CalcHash(const uint8 *buffer, int len) const
     hash += (hash << 15);
 
     return hash;
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-// uiStreamId helpers
-
-
-// uiStreamId helpers
-uint32 CYsfProtocol::IpToStreamId(const CIp &ip) const
-{
-    return ip.GetAddr() ^ (uint32)(MAKEDWORD(ip.GetPort(), ip.GetPort()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

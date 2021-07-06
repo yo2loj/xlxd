@@ -1,5 +1,6 @@
 CC=g++
 CFLAGS=-c -std=c++11 -pthread
+CFLAGS+=-DIPV6_SUPPORT
 LDFLAGS=-std=c++11 -pthread
 SOURCES=$(wildcard *.cpp)
 OBJECTS=$(SOURCES:.cpp=.o)
